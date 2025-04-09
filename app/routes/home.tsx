@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { Listas } from "../listas/listas.jsx";
+import { EditList } from "../editlists/editlist.jsx"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +10,5 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Listas />;
+  return <EditList />;
 }

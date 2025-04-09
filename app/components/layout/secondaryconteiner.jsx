@@ -1,6 +1,6 @@
 export default function SecondaryContainer({children, customStyles}) {
     return (
-        <div className={`w-[100%] h-[85%] flex justify-center items-center bg-[#B27DC7] rounded-[30px] ${customStyles}`}>
+        <div className={`overflow-x-auto whitespace-nowrap shadow-[0px_-26px_47px_12px_rgba(0,_0,_0,_0.1)] w-[100%] h-[85%] rounded-[30px] ${customStyles}`}>
             {children}
         </div>
     )
