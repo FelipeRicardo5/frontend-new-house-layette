@@ -11,8 +11,8 @@ export default function Listas() {
 
     const [data, setData] = useState([]);
 
-    useEffect(() => {
-        fetch("http://localhost:3000/api/list/")
+    useEffect(() => { // executa quando o componente é montado
+        fetch("https://sturdy-carnival-4597w4qqjj5c5x7-3000.app.github.dev/api/list")
             .then((res) => res.json())
             .then((resData) => setData(resData))
             .catch((err) => console.error("Erro ao buscar dados:", err));
@@ -21,7 +21,7 @@ export default function Listas() {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate("/editlist");
+        navigate("/createlist");
     }
 
     return (
@@ -31,7 +31,7 @@ export default function Listas() {
                 <p className="font-light text-[16px] ml-[40px] mb-3 " >inicialmente apenas é permitido a criação de apenas três listas </p>
                 <Button text={"edit"} onClick={handleClick} />
                 <SecondaryContainer customStyles={"flex flex-col justify-center items-center bg-[#B27DC7] rounded-[30px]"} >
-                    {data.map((list) => (
+                    {data.map((list) => ( // iterando sobre a lista de listas
                         <CardList
                             name={list.name}
                             description={list.description}
