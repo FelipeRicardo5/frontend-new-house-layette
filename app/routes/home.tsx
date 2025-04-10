@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
-import { Listas } from "../listas/listas.jsx";
-import { EditList } from "../editlists/editlist.jsx"
+import Listas from "./listas.jsx";
+import EditList from "./editlist.jsx"
 
 export function meta({}: Route.MetaArgs) {
   return [
