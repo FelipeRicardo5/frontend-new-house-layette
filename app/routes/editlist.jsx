@@ -23,14 +23,14 @@ export default function EditList({ href }) {
                         <SecondaryContainer customStyles={" bg-white h-[100%] p-3 flex flex-col items-start rounded-[30px] "}>
                             <Input
                                 type={"text"}
-                                nome={"ricardo"}
+                                nome={""}
                                 placeholder={"insira aqui o título da sua lista."}
                                 label={"Título"}
                                 customStyles={"w-full"}
                             />
                             <Input
                                 type={"text"}
-                                nome={"ricardo"}
+                                nome={""}
                                 label={"Título"}
                                 placeholder={"adicione irformações importantes aqui."}
                                 customStyles={"h-50 w-full"}

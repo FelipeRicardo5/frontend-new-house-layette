@@ -12,7 +12,7 @@ export default function Listas() {
     const [data, setData] = useState([]);
 
     useEffect(() => { // executa quando o componente é montado
-        fetch("https://sturdy-carnival-4597w4qqjj5c5x7-3000.app.github.dev/api/list")
+        fetch("http://localhost:3000/api/list")
             .then((res) => res.json())
             .then((resData) => setData(resData))
             .catch((err) => console.error("Erro ao buscar dados:", err));

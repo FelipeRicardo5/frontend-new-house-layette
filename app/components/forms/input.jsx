@@ -11,7 +11,7 @@ export default function Input({ value, nome, type = "text", placeholder, customS
             value={value}
             placeholder={placeholder}
             rows={6}
-            className="text-black font-normal border border-gray-400 rounded-[10px] p-2 resize-none outline-none"
+            className="text-black font-normal border border-gray-300 rounded-[10px] p-2 resize-none outline-none"
           />
         ) : (
           <input
@@ -20,7 +20,7 @@ export default function Input({ value, nome, type = "text", placeholder, customS
             value={value}
             type={type}
             placeholder={placeholder}
-            className="text-black font-normal border border-gray-400 rounded-[10px] p-2 h-12 outline-none"
+            className="text-black font-normal border border-gray-300 rounded-[10px] p-2 h-12 outline-none"
           />
         )}
       </div>
