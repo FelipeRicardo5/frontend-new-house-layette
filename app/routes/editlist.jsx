@@ -8,6 +8,8 @@ import { useNavigate } from "react-router";
 import { Link } from 'react-router'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import Navbar from '../components/layout/navbar.jsx'
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function EditList({ href }) {
 
@@ -31,52 +33,66 @@ export default function EditList({ href }) {
     // http://localhost:3000/api/list/67f73d862f453f2c1b5d72ab/items
 
     useEffect(() => { // executa quando o componente é montado
-        fetch(`http://localhost:3000/api/list/${id}/items`)
+        fetch(`https://backend-new-house-layette.onrender.com/api/list/${id}/items`)
             .then((res) => res.json())
             .then((resData) => setDataItems(resData))
             .catch((err) => console.error("Erro ao buscar dados:", err));
     }, []);
-    
+
     useEffect(() => { // executa quando o componente é montado
-        fetch(`http://localhost:3000/api/list/${id}`)
+        fetch(`https://backend-new-house-layette.onrender.com/api/list/${id}`)
             .then((res) => res.json())
             .then((resData) => setData(resData))
             .catch((err) => console.error("Erro ao buscar dados:", err));
     }, []);
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
         setIsLoading(true);
         setError(null);
+        setSuccess(false); // Zera o sucesso antes de tudo
 
         try {
-            const response = await fetch(`http://localhost:3000/api/items/${id}/withList`, {
+            const response = await fetch(`https://backend-new-house-layette.onrender.com/api/items/${id}/withList`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json", // Define que o corpo é JSON
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ name, description, id }), // Envia os dados no formato esperado pelo controller
+                body: JSON.stringify({ name, description, id }),
             });
 
             if (!response.ok) {
                 throw new Error("Erro ao criar o item");
             }
 
-            const dataItems = await response.json();
-            console.log("Item criado com sucesso:", dataItems);
-            setSuccess(true);
-            setName(""); // Limpa o campo
-            setDescription(""); // Limpa o campo
+            const newItem = await response.json();
+            toastSuccess(); // mostra toast imediatamente
+
+            // Espera 2 segundos antes de atualizar os estados e renderizar
+            setTimeout(() => {
+                setDataItems(prevData => ({
+                    ...prevData,
+                    items: [...prevData.items, newItem]
+                }));
+                setSuccess(true);
+                setName("");
+                setDescription("");
+            }, 2000);
+
         } catch (err) {
+            toastError();
             setError(err.message);
         } finally {
-            setIsLoading(false);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
         }
     };
 
 
     const deleteItem = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/items/${id}`, {
+            const response = await fetch(`https://backend-new-house-layette.onrender.com/api/items/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,13 +112,35 @@ export default function EditList({ href }) {
         }
     };
 
-
+    const toastSuccess = () => {
+        toast.success("Item criado com sucesso!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+    const toastError = () => {
+        toast.error("Erro ao criar o item!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
 
 
     return (
         <div className="w-[100dvw] h-[100dvh] flex flex-col justify-center items-center bg-white">
             <MainConteiner customStyles={""} >
-                <h1 className="font-semibold text-[46px] ml-[40px] mb-0" >Editando lista "{data.name}"</h1>
+
+                <Navbar name={`Editando lista ${data.name || ''}`} />
                 <SecundaryConteiner customStyles={" bg-[#B27DC7] p-10 shadow-[0px_-26px_47px_12px_rgba(0,_0,_0,_0.1)] rounded-[30px] "} >
                     <SecondaryContainer customStyles={"flex flex-row bg-white h-[100%] shadow-[0px_20px_47px_12px_rgba(0,_0,_0,_0.3)] rounded-[30px] "} >
                         <SecondaryContainer customStyles={" bg-white h-[100%] p-3 flex flex-col items-start rounded-[30px] "}>
@@ -117,7 +155,7 @@ export default function EditList({ href }) {
                                 type={"text"}
                                 nome={""}
                                 label={"Título"}
-                                placeholder={"adicione irformações importantes aqui."}
+                                placeholder={"adicione detalhes importantes aqui."}
                                 customStyles={"h-50 w-full"}
                                 isTextarea
                             />
@@ -151,8 +189,18 @@ export default function EditList({ href }) {
                                 />
                             </form>
                         </SecondaryContainer>
-                        {error && <p style={{ color: "red" }}>Erro: {error}</p>}
-                        {success && <p style={{ color: "green" }}>Item criado com sucesso!</p>}
+                        {useEffect(() => {
+                            if (error) {
+                                toastError();
+                                setError(null); // resetar para evitar múltiplas chamadas
+                            }
+                        }, [])}
+                        {useEffect(() => {
+                            if (success) {
+                                toastSuccess();
+                                setSuccess(false); // resetar para evitar múltiplas chamadas
+                            }
+                        }, [])}
 
                         <SecondaryContainer customStyles={" p-2"} >
                             {dataItems?.items?.length > 0 ? (
@@ -170,6 +218,8 @@ export default function EditList({ href }) {
                     </SecondaryContainer>
                 </SecundaryConteiner>
             </MainConteiner>
+            <ToastContainer />
+            <p className="font-light text-[20px] text-gray-500 mt-2" >para Maria de Fátima.</p>
         </div>
     )
 }

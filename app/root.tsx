@@ -1,3 +1,6 @@
+import 'react-toastify/dist/ReactToastify.css';
+
+
 import {
   isRouteErrorResponse,
   Links,
